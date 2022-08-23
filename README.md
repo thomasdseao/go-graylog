@@ -1,11 +1,12 @@
 <p align="center">
   <a href="https://travis-ci.org/thomasdseao/go-graylog" target="_blank"><img src="https://travis-ci.org/thomasdseao/go-graylog.png?branch=master"></a>
-  # Go Graylog package
 </p>
+<h1 align="center">Go Graylog package</h1>
 
 ### This package implement Graylog GELF interface to send message using UDP or TCP transport, in Golang.
 
-# Example
+
+## Example
 
 ```go
 package main
@@ -33,10 +34,10 @@ func main() {
 }
 ```
 
-# Tests
+## Tests
 ```
 go test
 ```
 
-# Contribute
+## Contribute
 #### Feel free to submit PR with another implementations of Graylog or improvements.
