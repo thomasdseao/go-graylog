@@ -20,13 +20,17 @@ func main() {
 		graylog.UDP,
 		true,
 	})
-
-	// Send message
-	sent, err := gelf.Send(graylog.Message{
+    
+	// Create message and JSON encode it
+	message := graylog.Message{
 		Version:      "1.1",
 		Host:         "example.com",
 		ShortMessage: "This is the short message",
-	})
+	}
+	jsonMessage, _ := json.Marshal(message)
+	
+	// Send message
+	sent, err := gelf.Send(jsonMessage)
 
 }
 ```
