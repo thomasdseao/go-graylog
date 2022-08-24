@@ -30,6 +30,7 @@ type Message struct {
 	FullMessage  string                 `json:"full_message,omitempty"`
 	Timestamp    int64                  `json:"timestamp,omitempty"`
 	Level        uint                   `json:"level,omitempty"`
+	Extra        map[string]interface{} `json:"-,"`
 }
 
 type Gelf struct {
@@ -60,8 +61,8 @@ func (gelf *Gelf) compress(byte []byte) bytes.Buffer {
 }
 
 func (gelf *Gelf) Send(message []byte) (bool, error) {
-	var messageStruct Message
-	err := json.Unmarshal(message, messageStruct)
+	messageStruct := Message{}
+	err := json.Unmarshal(message, &messageStruct)
 	if err != nil {
 		if gelf.Config.ErrorLog {
 			log.Printf("Unable to encode the message : %s", err)
