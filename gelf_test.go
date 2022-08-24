@@ -53,9 +53,6 @@ func Test_Gelf_ResolveTCPAddr_Error(t *testing.T) {
 		Version:      "1.1",
 		Host:         "example.com",
 		ShortMessage: "This is the short message",
-		Extra: map[string]interface{}{
-			"_OOOK": "okok",
-		},
 	}
 
 	jsonMessage, _ := json.Marshal(message)
