@@ -60,15 +60,23 @@ func (gelf *Gelf) compress(byte []byte) bytes.Buffer {
 	return buffer
 }
 
-func (gelf *Gelf) Send(message Message) (bool, error) {
-	messageJson, err := json.Marshal(message)
+func (gelf *Gelf) Send(message []byte) (bool, error) {
+	var messageStruct Message
+	err := json.Unmarshal(message, messageStruct)
 	if err != nil {
 		if gelf.Config.ErrorLog {
 			log.Printf("Unable to encode the message : %s", err)
 		}
 		return false, err
 	}
-	compressed := gelf.compress(messageJson)
+
+	if err != nil {
+		if gelf.Config.ErrorLog {
+			log.Printf("Unable to encode the message : %s", err)
+		}
+		return false, err
+	}
+	compressed := gelf.compress(message)
 
 	var addr = gelf.Config.Hostname + ":" + strconv.Itoa(gelf.Config.Port)
 	var conn net.Conn
