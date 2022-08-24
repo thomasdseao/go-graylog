@@ -3,6 +3,7 @@ package graylog
 import (
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"encoding/json"
 )
 
 func Test_NewGelf(t *testing.T) {
@@ -27,11 +28,14 @@ func Test_Gelf_ResolveUDPAddr_Error(t *testing.T) {
 		true,
 	})
 
-	send, err := gelf.Send(Message{
+	message := Message{
 		Version:      "1.1",
 		Host:         "example.com",
 		ShortMessage: "This is the short message",
-	})
+	}
+	jsonMessage, _ := json.Marshal(message)
+
+	send, err := gelf.Send(jsonMessage)
 
 	assert.NotEqual(t, err, nil)
 	assert.Equal(t, send, false)
@@ -45,11 +49,17 @@ func Test_Gelf_ResolveTCPAddr_Error(t *testing.T) {
 		true,
 	})
 
-	send, err := gelf.Send(Message{
+	message := Message{
 		Version:      "1.1",
 		Host:         "example.com",
 		ShortMessage: "This is the short message",
-	})
+		Extra: map[string]interface{}{
+			"_OOOK": "okok",
+		},
+	}
+
+	jsonMessage, _ := json.Marshal(message)
+	send, err := gelf.Send(jsonMessage)
 
 	assert.NotEqual(t, err, nil)
 	assert.Equal(t, send, false)
