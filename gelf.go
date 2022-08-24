@@ -30,7 +30,6 @@ type Message struct {
 	FullMessage  string                 `json:"full_message,omitempty"`
 	Timestamp    int64                  `json:"timestamp,omitempty"`
 	Level        uint                   `json:"level,omitempty"`
-	Extra        map[string]interface{} `json:"-,"`
 }
 
 type Gelf struct {
