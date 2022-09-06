@@ -1,5 +1,5 @@
-[![godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/thomasdseao/go-graylog)
-[!license](http://img.shields.io/badge/license-MIT-red.svg?style=flat)
+[![godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/thomasdseao/go-graylog)]
+[![license](http://img.shields.io/badge/license-MIT-red.svg?style=flat)]
 
 <h1 align="center">Go Graylog package</h1>
 
