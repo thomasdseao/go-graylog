@@ -79,48 +79,74 @@ func (gelf *Gelf) Send(message []byte) (bool, error) {
 	compressed := gelf.compress(message)
 
 	var addr = gelf.Config.Hostname + ":" + strconv.Itoa(gelf.Config.Port)
-	var conn net.Conn
 
 	if gelf.Config.Transport == TCP {
-		tcpAddr, err := net.ResolveTCPAddr("tcp", addr)
+		_, err := gelf.sendTCP(addr, compressed.Bytes())
 		if err != nil {
-			if gelf.Config.ErrorLog {
-				log.Printf("Unable to resolve TCP address : %s", err)
-			}
-			return false, err
-		}
-		conn, err = net.DialTCP("tcp", nil, tcpAddr)
-		if err != nil {
-			if gelf.Config.ErrorLog {
-				log.Printf("TCP Transport error : %s", err)
-			}
 			return false, err
 		}
 	} else {
-		udpAddr, err := net.ResolveUDPAddr("udp", addr)
+		_, err := gelf.sendUDP(addr, compressed.Bytes())
 		if err != nil {
-			if gelf.Config.ErrorLog {
-				log.Printf("Unable to resolve UDP address : %s", err)
-			}
-			return false, err
-		}
-		conn, err = net.DialUDP("udp", nil, udpAddr)
-		if err != nil {
-			if gelf.Config.ErrorLog {
-				log.Printf("UDP Transport error : %s", err)
-			}
 			return false, err
 		}
 	}
 
-	_, err = conn.Write(compressed.Bytes())
+	return true, nil
+}
+
+func (gelf *Gelf) sendUDP(addr string, message []byte) (bool, error) {
+	var conn *net.UDPConn
+	udpAddr, err := net.ResolveUDPAddr("udp", addr)
 	if err != nil {
 		if gelf.Config.ErrorLog {
-			log.Printf("Error during sending message : %s", err)
+			log.Printf("Unable to resolve UDP address : %s", err)
 		}
 		return false, err
 	}
-	conn.Close()
+	conn, err = net.DialUDP("udp", nil, udpAddr)
+	if err != nil {
+		if gelf.Config.ErrorLog {
+			log.Printf("UDP Transport error : %s", err)
+		}
+		return false, err
+	}
 
-	return true, nil
+	_, err = conn.Write(message)
+	if err != nil {
+		if gelf.Config.ErrorLog {
+			log.Printf("Unable to send UDP message : %s", err)
+		}
+		return false, err
+	}
+
+	return true, err
+}
+
+func (gelf *Gelf) sendTCP(addr string, message []byte) (bool, error) {
+	var conn *net.TCPConn
+	tcpAddr, err := net.ResolveTCPAddr("tcp", addr)
+	if err != nil {
+		if gelf.Config.ErrorLog {
+			log.Printf("Unable to resolve TCP address : %s", err)
+		}
+		return false, err
+	}
+	conn, err = net.DialTCP("tcp", nil, tcpAddr)
+	if err != nil {
+		if gelf.Config.ErrorLog {
+			log.Printf("TCP Transport error : %s", err)
+		}
+		return false, err
+	}
+
+	_, err = conn.Write(message)
+	if err != nil {
+		if gelf.Config.ErrorLog {
+			log.Printf("Unable to send TCP message : %s", err)
+		}
+		return false, err
+	}
+
+	return true, err
 }
