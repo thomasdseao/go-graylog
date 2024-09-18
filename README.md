@@ -1,5 +1,5 @@
 [![godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/thomasdseao/go-graylog) [![license](http://img.shields.io/badge/license-MIT-red.svg?style=flat)](https://raw.githubusercontent.com/thomasdseao/go-graylog/master/LICENSE) [![CodeFactor](https://www.codefactor.io/repository/github/thomasdseao/go-graylog/badge)](https://www.codefactor.io/repository/github/thomasdseao/go-graylog)
-<h1 align="center">Go Graylog package</h1>
+<h1 align="center">Go Graylog Package</h1>
 
 ### This package implement Graylog GELF interface to send message using UDP or TCP transport, in Golang.
 
